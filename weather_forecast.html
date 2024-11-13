@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>週間天気予報</title>
+    <script>
+        async function fetchWeather(city) {
+            const apiKey = 'a90d94a74a5d6ae8ed672f2170276b57';
+            const url = `http://api.openweathermap.org/data/2.5/forecast/daily?q=${city}&cnt=7&appid=${apiKey}&lang=ja&units=metric`;
+            const response = await fetch(url);
+            const data = await response.json();
+            displayWeather(data);
+        }
+
+        function displayWeather(data) {
+            const weatherList = document.getElementById('weather-list');
+            weatherList.innerHTML = '';
+            data.list.forEach(day => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `日付: ${new Date(day.dt * 1000).toLocaleDateString()}<br>
+                                      天気: ${day.weather[0].description}<br>
+                                      気温: ${day.temp.day}°C<br>
+                                      湿度: ${day.humidity}%<br>
+                                      風速: ${day.speed}m/s<br>`;
+                weatherList.appendChild(listItem);
+            });
+        }
+
+        window.onload = () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const city = urlParams.get('city') || 'Tokyo';
+            fetchWeather(city);
+        };
+    </script>
+</head>
+<body>
+    <h1>週間天気予報</h1>
+    <ul id="weather-list"></ul>
+</body>
+</html>
