@@ -2,10 +2,11 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>週間天気予報</title>
+    <title>天気予報検索</title>
     <script>
-        async function fetchWeather(city) {
-            const apiKey = 'a90d94a74a5d6ae8ed672f2170276b57';
+        async function fetchWeather() {
+            const city = document.getElementById('city').value;
+            const apiKey = 'YOUR_API_KEY';
             const url = `http://api.openweathermap.org/data/2.5/forecast/daily?q=${city}&cnt=7&appid=${apiKey}&lang=ja&units=metric`;
             const response = await fetch(url);
             const data = await response.json();
@@ -25,16 +26,12 @@
                 weatherList.appendChild(listItem);
             });
         }
-
-        window.onload = () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const city = urlParams.get('city') || 'Tokyo';
-            fetchWeather(city);
-        };
     </script>
 </head>
 <body>
-    <h1>週間天気予報</h1>
+    <h1>天気予報検索</h1>
+    <input type="text" id="city" placeholder="都市名を入力">
+    <button onclick="fetchWeather()">検索</button>
     <ul id="weather-list"></ul>
 </body>
 </html>
